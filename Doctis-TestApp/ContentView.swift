@@ -8,14 +8,20 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    @StateObject var viewModel = AnimalsViewModel()
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+        switch viewModel.fetchState {
+        case .isLoading:
+            LoadingView()
+        case .loadedAll:
+            AnimalListView(animals: viewModel.animals)
+        case .noResults:
+            NoResultsView()
+        case .error(let error):
+            ErrorView(error: (error as! APIError).userFeedbackDescription)
         }
-        .padding()
     }
 }
 
