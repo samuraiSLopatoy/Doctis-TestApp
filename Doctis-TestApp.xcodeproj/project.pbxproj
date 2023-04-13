@@ -29,12 +29,11 @@
 		C877417029E17224005E0BB8 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C877416F29E17224005E0BB8 /* NetworkManager.swift */; };
 		C877417229E18E6D005E0BB8 /* AnimalsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C877417129E18E6D005E0BB8 /* AnimalsViewModel.swift */; };
 		C877417429E1ACF7005E0BB8 /* APIError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C877417329E1ACF7005E0BB8 /* APIError.swift */; };
-		C877417929E29154005E0BB8 /* Response+Animal.swift in Sources */ = {isa = PBXBuildFile; fileRef = C877417829E29154005E0BB8 /* Response+Animal.swift */; };
+		C877417929E29154005E0BB8 /* Animal.swift in Sources */ = {isa = PBXBuildFile; fileRef = C877417829E29154005E0BB8 /* Animal.swift */; };
 		C877417B29E29231005E0BB8 /* AnimalService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C877417A29E29231005E0BB8 /* AnimalService.swift */; };
 		C877417F29E2B854005E0BB8 /* FetchState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C877417E29E2B854005E0BB8 /* FetchState.swift */; };
 		C877418229E2C67A005E0BB8 /* AnimalListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C877418129E2C67A005E0BB8 /* AnimalListView.swift */; };
 		C877418529E2D21C005E0BB8 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C877418429E2D21C005E0BB8 /* LoadingView.swift */; };
-		C877418729E2D22D005E0BB8 /* NoResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C877418629E2D22D005E0BB8 /* NoResultsView.swift */; };
 		C877418929E2D237005E0BB8 /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C877418829E2D237005E0BB8 /* ErrorView.swift */; };
 		C877418C29E2D7B0005E0BB8 /* AnimalRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C877418B29E2D7B0005E0BB8 /* AnimalRowView.swift */; };
 		C877418F29E2D9C4005E0BB8 /* AnimalDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = C877418E29E2D9C4005E0BB8 /* AnimalDetail.swift */; };
@@ -66,12 +65,11 @@
 		C877416F29E17224005E0BB8 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		C877417129E18E6D005E0BB8 /* AnimalsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimalsViewModel.swift; sourceTree = "<group>"; };
 		C877417329E1ACF7005E0BB8 /* APIError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIError.swift; sourceTree = "<group>"; };
-		C877417829E29154005E0BB8 /* Response+Animal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Response+Animal.swift"; sourceTree = "<group>"; };
+		C877417829E29154005E0BB8 /* Animal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Animal.swift; sourceTree = "<group>"; };
 		C877417A29E29231005E0BB8 /* AnimalService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimalService.swift; sourceTree = "<group>"; };
 		C877417E29E2B854005E0BB8 /* FetchState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchState.swift; sourceTree = "<group>"; };
 		C877418129E2C67A005E0BB8 /* AnimalListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimalListView.swift; sourceTree = "<group>"; };
 		C877418429E2D21C005E0BB8 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
-		C877418629E2D22D005E0BB8 /* NoResultsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoResultsView.swift; sourceTree = "<group>"; };
 		C877418829E2D237005E0BB8 /* ErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorView.swift; sourceTree = "<group>"; };
 		C877418B29E2D7B0005E0BB8 /* AnimalRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimalRowView.swift; sourceTree = "<group>"; };
 		C877418E29E2D9C4005E0BB8 /* AnimalDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimalDetail.swift; sourceTree = "<group>"; };
@@ -174,7 +172,7 @@
 			isa = PBXGroup;
 			children = (
 				C877416829E168A6005E0BB8 /* Token.swift */,
-				C877417829E29154005E0BB8 /* Response+Animal.swift */,
+				C877417829E29154005E0BB8 /* Animal.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -220,7 +218,6 @@
 			children = (
 				C877418829E2D237005E0BB8 /* ErrorView.swift */,
 				C877418429E2D21C005E0BB8 /* LoadingView.swift */,
-				C877418629E2D22D005E0BB8 /* NoResultsView.swift */,
 			);
 			path = "FetchState Views";
 			sourceTree = "<group>";
@@ -354,9 +351,8 @@
 				C80E878C29E464970016F565 /* QuickInfoView.swift in Sources */,
 				C877417029E17224005E0BB8 /* NetworkManager.swift in Sources */,
 				C80E878A29E457E00016F565 /* NameView.swift in Sources */,
-				C877417929E29154005E0BB8 /* Response+Animal.swift in Sources */,
+				C877417929E29154005E0BB8 /* Animal.swift in Sources */,
 				C80E877929E40D3B0016F565 /* Image.swift in Sources */,
-				C877418729E2D22D005E0BB8 /* NoResultsView.swift in Sources */,
 				C877417229E18E6D005E0BB8 /* AnimalsViewModel.swift in Sources */,
 				C877417429E1ACF7005E0BB8 /* APIError.swift in Sources */,
 				C80E878429E452DA0016F565 /* PhotoView.swift in Sources */,

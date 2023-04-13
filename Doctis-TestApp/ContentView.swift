@@ -13,14 +13,20 @@ struct ContentView: View {
     
     var body: some View {
         switch viewModel.fetchState {
+        case .initial:
+            EmptyView()
         case .isLoading:
             LoadingView()
         case .loadedAll:
-            AnimalListView(animals: viewModel.animals)
-        case .noResults:
-            NoResultsView()
+            AnimalListView(viewModel: viewModel, 
+                           animals: viewModel.animals, 
+                           onScrolledAtBottom: {
+                guard viewModel.currentPage != viewModel.nextPage else { return }
+                viewModel.fetchAnimals()
+            })
         case .error(let error):
-            ErrorView(error: (error as! APIError).userFeedbackDescription)
+            ErrorView(viewModel: viewModel, 
+                      error: (error as! APIError).userFeedbackDescription)
         }
     }
 }

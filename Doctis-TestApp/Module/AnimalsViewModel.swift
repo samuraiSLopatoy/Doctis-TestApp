@@ -10,43 +10,77 @@ import Combine
 
 final class AnimalsViewModel: ObservableObject {
     
-    @Published var animals: [Animal] = []
-    @Published var fetchState: FetchState = .noResults
+    @Published var fetchState: FetchState = .initial
+    private var subscriptions: Set<AnyCancellable> = []
     
+    // meta
+    private var token: String = ""
+    @Published var animals: [Animal] = []
+    
+    // pagination
+    var currentPage: Int = 0
+    var nextPage: Int = 1
+    private var canLoadNextPage: Bool = true
+    @Published var showBottomSpinner: Bool = false
+    
+    // services
     private let authService = AuthService()
     private let animalService = AnimalService()
     
-    private var subscribers = Set<AnyCancellable>()
-    
     init() {
-        fetchAnimals()
+        fetchToken()
     }
     
     func fetchAnimals() {
+        guard canLoadNextPage else {
+            showBottomSpinner = false
+            return 
+        }
+        
+        let animalsPublisher = animalService.getAnimals(token: token, page: nextPage)
+        animalsPublisher
+            .receive(on: DispatchQueue.main)
+            .sink(
+                receiveCompletion: { [weak self] completion in
+                    switch completion {
+                    case .finished:
+                        self?.showBottomSpinner = false
+                        self?.fetchState = .loadedAll
+                    case .failure(let error):
+                        self?.fetchState = .error(error as! APIError)
+                    }
+                }, 
+                receiveValue: { [weak self] response in
+                    // pagination
+                    let currentPage = response.pagination?.currentPage ?? 0
+                    self?.currentPage = currentPage
+                    self?.nextPage = currentPage + 1
+                    // animals
+                    let animals = response.animals ?? []
+                    self?.animals.append(contentsOf: animals)
+                    self?.canLoadNextPage = !animals.isEmpty
+                })
+            .store(in: &subscriptions)
+    }
+    
+    func fetchToken() {
         fetchState = .isLoading
         
         let tokenPublisher = authService.getAccessToken()
         tokenPublisher
-            .flatMap { [weak self] token -> AnyPublisher<Response, Error> in
-                if let token = token.accessToken, let self = self {
-                    let animalsPublisher = self.animalService.getAnimals(token: token)
-                    return animalsPublisher
-                } else {
-                    return Fail(error: APIError.tokenIsEmpty).eraseToAnyPublisher()
-                }
-            }
-            .receive(on: DispatchQueue.main)
             .sink(
                 receiveCompletion: { [weak self] completion in
-                    if case .failure(let error as APIError) = completion {
-                        self?.fetchState = .error(error)
+                    switch completion {
+                    case .finished:
+                        self?.fetchAnimals()
+                    case .failure(_):
+                        self?.fetchState = .error(APIError.invalidToken)
                     }
                 },
-                receiveValue: { [weak self] response in
-                    let animals = response.animals ?? []
-                    self?.animals = animals
-                    self?.fetchState = animals.isEmpty ? .noResults : .loadedAll
+                receiveValue: { [weak self] token in
+                    let token = token.accessToken ?? ""
+                    self?.token = token
                 })
-            .store(in: &subscribers)
+            .store(in: &subscriptions)
     }
 }

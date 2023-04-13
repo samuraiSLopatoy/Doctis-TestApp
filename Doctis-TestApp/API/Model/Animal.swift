@@ -1,5 +1,5 @@
 //
-//  Response+Animal.swift
+//  Animal.swift
 //  Doctis-TestApp
 //
 //  Created by Михаил Кулагин on 09.04.2023.
@@ -11,12 +11,15 @@ import Foundation
 
 struct Response: Decodable {
     let animals: [Animal]?
-    // let pagination: Pagination?
+    let pagination: Pagination?
 }
 
 // MARK: - Animal
 
-struct Animal: Decodable {
+struct Animal: Decodable, Equatable {
+    
+    let uuid: UUID = UUID() // for work optimizing of LazyVStack
+    
     let id: Int?
     let colors: Colors?
     let age: Age?
@@ -71,6 +74,12 @@ struct Animal: Decodable {
                publishedAt: Date(), 
                distance: 182)
     ]
+    
+    // MARK: - Equatable
+    
+    static func == (lhs: Animal, rhs: Animal) -> Bool {
+        return lhs.id == rhs.id
+    }
 }
 
 // MARK: - Age
@@ -113,23 +122,18 @@ enum Size: String, Decodable {
     case small = "Small"
 }
 
-//// MARK: - Pagination
-//
-//struct Pagination: Decodable {
-//    let countPerPage, totalCount, currentPage, totalPages: Int?
-//    let links: PaginationLinks?
-//
-//    enum CodingKeys: String, CodingKey {
-//        case countPerPage = "count_per_page"
-//        case totalCount = "total_count"
-//        case currentPage = "current_page"
-//        case totalPages = "total_pages"
-//        case links = "_links"
-//    }
-//}
-//
-//// MARK: - PaginationLinks
-//
-//struct PaginationLinks: Decodable {
-//    let next: Next?
-//}
+// MARK: - Pagination
+
+struct Pagination: Decodable {
+    let countPerPage: Int?
+    let totalCount: Int?
+    let currentPage: Int?
+    let totalPages: Int?
+    
+    enum CodingKeys: String, CodingKey {
+        case countPerPage = "count_per_page"
+        case totalCount = "total_count"
+        case currentPage = "current_page"
+        case totalPages = "total_pages"
+    }
+}

@@ -10,10 +10,10 @@ import Combine
 
 struct AnimalService {
     
-    func getAnimals(token: String) -> AnyPublisher<Response, Error> {
+    func getAnimals(token: String, page: Int) -> AnyPublisher<Response, Error> {
         var urlRequest: URLRequest!
         
-        do { urlRequest = try createAnimalsRequest(token: token) }
+        do { urlRequest = try createAnimalsRequest(token: token, page: page) }
         catch {
             print(error.localizedDescription)
         }
@@ -34,11 +34,15 @@ struct AnimalService {
             .eraseToAnyPublisher()
     }
     
-    private func createAnimalsRequest(token: String) throws -> URLRequest {
+    private func createAnimalsRequest(token: String, page: Int) throws -> URLRequest {
         var components: URLComponents = .init()
         components.scheme = "https"
         components.host = APIConstant.host
         components.path = "/v2/animals"
+        components.queryItems = [
+            URLQueryItem(name: "page", value: String(page)),
+            URLQueryItem(name: "limit", value: String(10))
+        ]
         
         guard let url = components.url else {
             throw APIError.invalidURL(url: components.url!)

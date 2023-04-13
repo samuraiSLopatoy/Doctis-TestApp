@@ -8,8 +8,8 @@
 import Foundation
 
 enum FetchState {
+    case initial
     case isLoading
     case loadedAll
-    case noResults
     case error(Error)
 }

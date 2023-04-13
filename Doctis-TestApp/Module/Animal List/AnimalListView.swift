@@ -9,14 +9,19 @@ import SwiftUI
 
 struct AnimalListView: View {
     
+    @ObservedObject var viewModel: AnimalsViewModel
+    let animals: [Animal]
+    
     @AppStorage("isDarkMode") private var isDarkMode: Bool = false
     
-    let animals: [Animal]
+    let onScrolledAtBottom: () -> Void
+    @State private var bottomSpinnerIsAnimating: Bool = false
     
     var body: some View {
         ScrollView {
             headline
             list
+            if viewModel.showBottomSpinner { customBottomSpinner }
         }
         .padding(.top, 1)
     }
@@ -49,7 +54,7 @@ struct AnimalListView: View {
     
     var list: some View {
         LazyVStack(spacing: 16) {
-            ForEach(animals, id: \.id) { animal in
+            ForEach(animals, id: \.uuid) { animal in
                 NavigationLink { 
                     ZStack {
                         Color.backgroundDetail
@@ -63,9 +68,26 @@ struct AnimalListView: View {
                         .foregroundColor(.text)
                         .cornerRadius(12)
                 }
+                // pagination logic
+                .onAppear {
+                    if animals.last == animal {
+                        viewModel.showBottomSpinner = true
+                        onScrolledAtBottom()
+                    }
+                }
             }
         }
         .padding([.horizontal, .bottom])
+    }
+    
+    var customBottomSpinner: some View {
+        Text("🐶🐱🐰")
+            .font(.largeTitle)
+            .rotationEffect(.degrees(bottomSpinnerIsAnimating ? 180 : 0))
+            .animation(.default.repeatForever(autoreverses: false),
+                       value: bottomSpinnerIsAnimating)
+            .onAppear { bottomSpinnerIsAnimating = true }
+            .onDisappear { bottomSpinnerIsAnimating = false }
     }
 }
 
@@ -75,7 +97,7 @@ struct AnimalsListView_Previews: PreviewProvider {
             ZStack {
                 Color.backgroundMain
                     .edgesIgnoringSafeArea(.all)
-                AnimalListView(animals: Animal.mockAnimals)                
+                AnimalListView(viewModel: AnimalsViewModel(), animals: Animal.mockAnimals, onScrolledAtBottom: {})                
             }
             .foregroundColor(.text)
             .navigationBarHidden(true)

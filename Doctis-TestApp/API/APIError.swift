@@ -12,7 +12,7 @@ enum APIError: LocalizedError {
     case invalidURL(url: URL)
     case statusCode(Int)
     case decoding(DecodingError?)
-    case tokenIsEmpty
+    case invalidToken
     
     // info for debugging
     var errorDescription: String? {
@@ -20,14 +20,14 @@ enum APIError: LocalizedError {
         case .invalidURL(let url): return "🆘 " + "bad URL: \(String(describing: url))"
         case .statusCode(let statusCode): return "🆘 " + "bad response with status code: \(statusCode)"
         case .decoding(let decodingError): return "🆘 " + "decoding error: \(String(describing: decodingError))"
-        case .tokenIsEmpty: return "🆘 " + "token is empty"
+        case .invalidToken: return "🆘 " + "invalid token"
         }
     }
     
     // user feedback
     var userFeedbackDescription: String {
         switch self {
-        case .invalidURL, .decoding, .tokenIsEmpty:
+        case .invalidURL, .decoding, .invalidToken:
             return "Sorry, something went wrong."
         case .statusCode:
             return "Sorry, the connection to our server is failed."
